@@ -72,6 +72,7 @@ public class DataKendaraanFrame extends JFrame implements FrameBase, ActionListe
     setLayout(new AbsoluteLayout());
 
     tblDataKendaraan.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "Id kendaraan", "Id pelanggan", "Plat nomor", "Merk", "Model" }));
+    tblDataKendaraan.addMouseListener(this);
     jScrollPane1.setViewportView(tblDataKendaraan);
 
     add(jScrollPane1, new AbsoluteConstraints(650, 140, 430, 490));
@@ -281,10 +282,10 @@ public class DataKendaraanFrame extends JFrame implements FrameBase, ActionListe
       tfNopol.setText(data[2].toString());
       tfMerk.setText(data[3].toString());
       tfModel.setText(data[4].toString());
-      tfTahun.setText(data[5].toString());
-      tfKilometer.setText(data[6].toString());
+      tfTahun.setText(String.valueOf(data[5]));
+      tfKilometer.setText(String.valueOf(data[6]));
       tfNosin.setText(data[7].toString());
-      tfNosin.setText(data[8].toString());
+      tfNorang.setText(data[8].toString());
     }
   }
 
@@ -312,8 +313,8 @@ public class DataKendaraanFrame extends JFrame implements FrameBase, ActionListe
         data[2] = resultSet.getString("no_plat");
         data[3] = resultSet.getString("merk");
         data[4] = resultSet.getString("model");
-        data[5] = resultSet.getString("tahun");
-        data[6] = resultSet.getString("kilometer");
+        data[5] = resultSet.getInt("tahun");
+        data[6] = resultSet.getInt("kilometer");
         data[7] = resultSet.getString("no_mesin");
         data[8] = resultSet.getString("no_rangka");
         dataList.add(data);

@@ -50,7 +50,6 @@ public class DataPelangganFrame extends JFrame implements ActionListener, MouseL
     lblNama = new JLabel();
     lblPelanggan = new JLabel();
     riwayatoren = new JLabel();
-    btnClear = new JButton();
     btnUpdate = new JButton();
     btnDelete = new JButton();
     btnInsert = new JButton();
@@ -94,13 +93,6 @@ public class DataPelangganFrame extends JFrame implements ActionListener, MouseL
     riwayatoren.setText("Data Pelanggan");
     add(riwayatoren, new AbsoluteConstraints(330, 70, -1, -1));
 
-    btnClear.setBackground(new Color(255, 255, 255));
-    btnClear.setFont(new Font("Montserrat SemiBold", 0, 14));
-    btnClear.setForeground(new Color(0, 0, 0));
-    btnClear.setText("Clear");
-    btnClear.addActionListener(this);
-    add(btnClear, new AbsoluteConstraints(930, 400, -1, -1));
-
     btnUpdate.setBackground(new Color(255, 255, 255));
     btnUpdate.setFont(new Font("Montserrat SemiBold", 0, 14));
     btnUpdate.setForeground(new Color(0, 0, 0));
@@ -130,7 +122,6 @@ public class DataPelangganFrame extends JFrame implements ActionListener, MouseL
     add(jLabel1, new AbsoluteConstraints(0, 0, 1250, -1));
   }
 
-  private JButton btnClear;
   private JButton btnDelete;
   private JButton btnInsert;
   private JButton btnUpdate;
@@ -196,11 +187,6 @@ public class DataPelangganFrame extends JFrame implements ActionListener, MouseL
     tfTelepon.setText(null);
   }
 
-  private void btnClearActionPerformed(ActionEvent event) {
-    dataList.clear();
-    tblDataPelanggan.setModel(getUpdatedModel(tblDataPelanggan, dataList));
-  }
-
   @Override
   public void actionPerformed(ActionEvent event) {
     if (event.getSource() == btnInsert) {
@@ -209,8 +195,6 @@ public class DataPelangganFrame extends JFrame implements ActionListener, MouseL
       btnUpdateActionPerformed(event);
     } else if (event.getSource() == btnDelete) {
       btnDeleteActionPerformed(event);
-    } else if (event.getSource() == btnClear) {
-      btnClearActionPerformed(event);
     }
   }
 

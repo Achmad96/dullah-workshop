@@ -6,15 +6,15 @@ import java.sql.SQLException;
 
 public class DashboardHelper extends Helper {
   public DashboardHelper() {
-    super("kendaraan");
+    super("reservasi");
   }
 
   @Override
   public ResultSet getAllData() {
     try {
       this.createConnection();
-      final String sql = "SELECT k.id_kendaraan, k.merk AS nama_kendaraan, p.id_pelanggan, p.nama_pelanggan FROM " + this.getTableName() + " k "
-          + "INNER JOIN pelanggan p ON k.id_pelanggan = p.id_pelanggan";
+      final String sql = "SELECT r.id_reservasi, r.id_kendaraan, r.id_mekanik, rp.id_layanan FROM " + this.getTableName()
+          + " r INNER JOIN perbaikan pn ON r.id_reservasi = pn.id_reservasi INNER JOIN riwayat_perbaikan rp ON rp.id_riwayat_perbaikan = pn.id_perbaikan";
       final PreparedStatement preparedStatement = this.getConnection().prepareStatement(sql);
       System.out.println(sql);
       return preparedStatement.executeQuery();

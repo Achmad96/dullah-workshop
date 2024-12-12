@@ -40,7 +40,7 @@ public class DataKonsultanFrame extends JFrame implements FrameBase, ActionListe
 
   private void initComponents() {
     jScrollPane1 = new JScrollPane();
-    tblRiwayatService = new JTable();
+    tblKonsultan = new JTable();
     tfTelepon = new JTextField();
     tfAlamat = new JTextField();
     tfNama = new JTextField();
@@ -58,8 +58,9 @@ public class DataKonsultanFrame extends JFrame implements FrameBase, ActionListe
 
     setLayout(new AbsoluteLayout());
 
-    tblRiwayatService.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "Id konsultan", "Nama", "Alamat", "No telpon" }));
-    jScrollPane1.setViewportView(tblRiwayatService);
+    tblKonsultan.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "Id konsultan", "Nama", "Alamat", "No telpon" }));
+    tblKonsultan.addMouseListener(this);
+    jScrollPane1.setViewportView(tblKonsultan);
 
     add(jScrollPane1, new AbsoluteConstraints(260, 440, 740, 250));
     add(tfTelepon, new AbsoluteConstraints(390, 270, 610, -1));
@@ -132,7 +133,7 @@ public class DataKonsultanFrame extends JFrame implements FrameBase, ActionListe
   private JLabel lblNama;
   private JLabel lblTelepon;
   private JLabel riwayatoren;
-  private JTable tblRiwayatService;
+  private JTable tblKonsultan;
   private JTextField tfAlamat;
   private JTextField tfID;
   private JTextField tfNama;
@@ -201,6 +202,16 @@ public class DataKonsultanFrame extends JFrame implements FrameBase, ActionListe
   public void mouseClicked(MouseEvent event) {
     if (event.getSource() == jLabel3) {
       App.getPanelSwitcher().back();
+    } else if (event.getSource() == tblKonsultan) {
+      final int row = tblKonsultan.getSelectedRow();
+      if (row == -1) {
+        return;
+      }
+      final Object[] data = dataList.get(row);
+      tfID.setText(data[0].toString());
+      tfNama.setText(data[1].toString());
+      tfAlamat.setText(data[2].toString());
+      tfTelepon.setText(data[3].toString());
     }
   }
 
@@ -226,10 +237,10 @@ public class DataKonsultanFrame extends JFrame implements FrameBase, ActionListe
         data[0] = resultSet.getString("id_konsultan");
         data[1] = resultSet.getString("nama_konsultan");
         data[2] = resultSet.getString("alamat_konsultan");
-        data[3] = resultSet.getString("no_telepon");
+        data[3] = resultSet.getString("telpon_konsultan");
         dataList.add(data);
       }
-      tblRiwayatService.setModel(getUpdatedModel(tblRiwayatService, dataList));
+      tblKonsultan.setModel(getUpdatedModel(tblKonsultan, dataList));
     } catch (SQLException exception) {
       exception.printStackTrace();
     }

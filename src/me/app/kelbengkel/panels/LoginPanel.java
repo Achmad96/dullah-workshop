@@ -139,7 +139,6 @@ public class LoginPanel extends JPanel implements ActionListener, KeyListener {
         tfEmail.requestFocus();
         return;
       }
-      System.out.println("Hello world");
       btnLoginActionPerformed(null);
     }
   }

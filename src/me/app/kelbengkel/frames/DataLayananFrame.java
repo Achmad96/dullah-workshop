@@ -60,6 +60,7 @@ public class DataLayananFrame extends JFrame implements FrameBase, ActionListene
     setLayout(new AbsoluteLayout());
 
     tblLayanan.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "Id layanan", "Jenis layanan", "Harga" }));
+    tblLayanan.addMouseListener(this);
     jScrollPane1.setViewportView(tblLayanan);
 
     add(jScrollPane1, new AbsoluteConstraints(260, 440, 740, 250));
@@ -132,15 +133,15 @@ public class DataLayananFrame extends JFrame implements FrameBase, ActionListene
   private JTextField tfJenisLayanan;
 
   public HashMap<String, Object> processInput() {
-    if (isNumber(tfHarga.getText().trim())) {
+    if (!isNumber(tfHarga.getText().trim())) {
       MessageUtil.showErrorMessageDialog(this, "Data harga harus berupa angka!");
       return null;
     }
     final String jenis = tfJenisLayanan.getText().trim();
     final int harga = Integer.parseInt(tfHarga.getText().trim());
     final HashMap<String, Object> parameters = new HashMap<>();
-    parameters.put("jenis_jasa", jenis);
-    parameters.put("harga_jasa", harga);
+    parameters.put("jenis_layanan", jenis);
+    parameters.put("biaya_layanan", harga);
     return parameters;
   }
 
@@ -166,14 +167,14 @@ public class DataLayananFrame extends JFrame implements FrameBase, ActionListene
       return;
     }
     final String id = tfID.getText().trim();
-    final boolean isSuccess = dataLayananHelper.insertData(id, parameters);
+    final boolean isSuccess = dataLayananHelper.updateData(id, parameters);
     clearInput();
     if (isSuccess) {
-      MessageUtil.showSucessMessageDialog(this, "Berhasil menambahkan data layanan!");
+      MessageUtil.showSucessMessageDialog(this, "Berhasil memperbarui data layanan!");
       loadData();
       return;
     }
-    MessageUtil.showErrorMessageDialog(this, "Gagal menambahkan data layanan!");
+    MessageUtil.showErrorMessageDialog(this, "Gagal memperbarui data layanan!");
   }
 
   private void btnDeleteActionPerformed(ActionEvent event) {
@@ -208,6 +209,15 @@ public class DataLayananFrame extends JFrame implements FrameBase, ActionListene
   public void mouseClicked(MouseEvent event) {
     if (event.getSource() == jLabel3) {
       App.getPanelSwitcher().back();
+    } else if (event.getSource() == tblLayanan) {
+      final int row = tblLayanan.getSelectedRow();
+      if (row == -1) {
+        return;
+      }
+      final Object[] data = dataList.get(row);
+      tfID.setText(data[0].toString());
+      tfJenisLayanan.setText(data[1].toString());
+      tfHarga.setText(data[2].toString());
     }
   }
 
@@ -230,9 +240,9 @@ public class DataLayananFrame extends JFrame implements FrameBase, ActionListene
     try {
       while (resultSet.next()) {
         final Object[] data = new Object[3];
-        data[0] = resultSet.getString("id_jasa");
-        data[1] = resultSet.getString("nama_jasa");
-        data[2] = resultSet.getString("biaya_jasa");
+        data[0] = resultSet.getString("id_layanan");
+        data[1] = resultSet.getString("jenis_layanan");
+        data[2] = resultSet.getInt("biaya_layanan");
         dataList.add(data);
       }
       tblLayanan.setModel(getUpdatedModel(tblLayanan, dataList));

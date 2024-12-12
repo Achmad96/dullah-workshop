@@ -31,8 +31,7 @@ public class DatabaseConnection {
   private static String[] data;
   private final static String CONFIG_FILE = "resources/config/config.text";
 
-  private DatabaseConnection() {
-  }
+  private DatabaseConnection() {}
 
   private static void loadData() {
     data = new String[6];
@@ -51,8 +50,7 @@ public class DatabaseConnection {
     }
   }
 
-  private static final Map<String, Integer> dataMapping = Map.of("key", 0, "iv", 1, "host", 2, "database", 3, "user", 4,
-      "password", 5);
+  private static final Map<String, Integer> dataMapping = Map.of("key", 0, "iv", 1, "host", 2, "database", 3, "user", 4, "password", 5);
 
   private static void processLine(String line) {
     try {
@@ -69,8 +67,7 @@ public class DatabaseConnection {
         }
         data[dataMapping.get(key)] = split[1].trim();
       }
-    } catch (InvalidKeyException | NoSuchPaddingException | NoSuchAlgorithmException
-        | InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException exception) {
+    } catch (InvalidKeyException | NoSuchPaddingException | NoSuchAlgorithmException | InvalidAlgorithmParameterException | BadPaddingException | IllegalBlockSizeException exception) {
       exception.printStackTrace();
     }
   }
@@ -112,8 +109,7 @@ public class DatabaseConnection {
       final String user = data[4];
       final String path = DatabaseConnection.class.getClassLoader().getResource(CONFIG_FILE).toURI().getPath();
       final Path configPath = Paths.get(path.startsWith("/") ? path.substring(1) : path);
-      try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(
-          Files.newOutputStream(configPath, StandardOpenOption.WRITE), StandardCharsets.UTF_8))) {
+      try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(Files.newOutputStream(configPath, StandardOpenOption.WRITE), StandardCharsets.UTF_8))) {
         writer.write("key=" + encodedKey);
         writer.newLine();
         writer.write("iv=" + encodedIv);
@@ -126,8 +122,7 @@ public class DatabaseConnection {
         writer.newLine();
         writer.write("password=" + encryptedPassword);
       }
-    } catch (URISyntaxException | IOException | NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException
-        | InvalidAlgorithmParameterException | BadPaddingException
+    } catch (URISyntaxException | IOException | NoSuchAlgorithmException | InvalidKeyException | NoSuchPaddingException | InvalidAlgorithmParameterException | BadPaddingException
         | IllegalBlockSizeException exception) {
       exception.printStackTrace();
     }

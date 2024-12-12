@@ -187,7 +187,7 @@ public class Helper {
     options.keySet().forEach(k -> stringBuilder.append(k).append(", "));
     stringBuilder.setLength(stringBuilder.length() - 2);
     stringBuilder.append(") VALUES (");
-    options.forEach((_, _) -> stringBuilder.append("?, "));
+    options.forEach((a, b) -> stringBuilder.append("?, "));
     stringBuilder.append("?)");
     return stringBuilder.toString();
   }

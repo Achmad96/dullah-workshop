@@ -59,6 +59,7 @@ public class DataMekanikFrame extends JFrame implements FrameBase, ActionListene
     setLayout(new AbsoluteLayout());
 
     tblDataMekanik.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "Id mekanik", "Nama Mekanik", "Spesialis", "Nomor telpon" }));
+    tblDataMekanik.addMouseListener(this);
     jScrollPane1.setViewportView(tblDataMekanik);
 
     add(jScrollPane1, new AbsoluteConstraints(260, 440, 740, 250));
@@ -89,18 +90,20 @@ public class DataMekanikFrame extends JFrame implements FrameBase, ActionListene
 
     riwayatoren.setFont(new Font("Akira Expanded", 0, 48));
     riwayatoren.setForeground(new Color(255, 163, 26));
-    riwayatoren.setText("Data Pelanggan");
+    riwayatoren.setText("Data Mekanik");
     add(riwayatoren, new AbsoluteConstraints(330, 70, -1, -1));
 
     btnUpdate.setBackground(new Color(255, 255, 255));
     btnUpdate.setFont(new Font("Montserrat SemiBold", 0, 14));
     btnUpdate.setForeground(new Color(0, 0, 0));
     btnUpdate.setText("Update");
+    btnUpdate.addActionListener(this);
     add(btnUpdate, new AbsoluteConstraints(730, 400, -1, -1));
 
     btnDelete.setBackground(new Color(255, 0, 0));
     btnDelete.setFont(new Font("Montserrat SemiBold", 0, 14));
     btnDelete.setText("Delete");
+    btnDelete.addActionListener(this);
     btnDelete.addActionListener(this);
     add(btnDelete, new AbsoluteConstraints(830, 400, -1, -1));
 
@@ -193,6 +196,16 @@ public class DataMekanikFrame extends JFrame implements FrameBase, ActionListene
   public void mouseClicked(MouseEvent event) {
     if (event.getSource() == jLabel3) {
       App.getPanelSwitcher().back();
+    } else if (event.getSource() == tblDataMekanik) {
+      final int row = tblDataMekanik.getSelectedRow();
+      if (row == -1) {
+        return;
+      }
+      final Object[] data = dataList.get(row);
+      tfID.setText(data[0].toString());
+      tfNama.setText(data[1].toString());
+      tfSpesialis.setText(data[2].toString());
+      tfTelepon.setText(data[3].toString());
     }
   }
 
@@ -217,8 +230,8 @@ public class DataMekanikFrame extends JFrame implements FrameBase, ActionListene
         final Object[] data = new Object[4];
         data[0] = resultSet.getString("id_mekanik");
         data[1] = resultSet.getString("nama_mekanik");
-        data[2] = resultSet.getString("telpon_mekanik");
-        data[3] = resultSet.getString("spesialis_mekanik");
+        data[2] = resultSet.getString("spesialis_mekanik");
+        data[3] = resultSet.getString("telpon_mekanik");
         dataList.add(data);
       }
       tblDataMekanik.setModel(getUpdatedModel(tblDataMekanik, dataList));
@@ -242,8 +255,8 @@ public class DataMekanikFrame extends JFrame implements FrameBase, ActionListene
     final String spesialis = tfSpesialis.getText().trim();
     final HashMap<String, Object> parameters = new HashMap<>();
     parameters.put("nama_mekanik", nama);
-    parameters.put("telpon_mekanik", telepon);
     parameters.put("spesialis_mekanik", spesialis);
+    parameters.put("telpon_mekanik", telepon);
     return parameters;
   }
 }

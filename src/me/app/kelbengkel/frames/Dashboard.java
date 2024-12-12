@@ -43,8 +43,10 @@ public class Dashboard extends JFrame implements FrameBase, ActionListener {
   }
 
   private void initComponents() {
+    btnLogout = new JButton();
     btnPembayaran = new JButton();
-    btnReservasiPerbaikan = new JButton();
+    btnPerbaikan = new JButton();
+    btnReservasi = new JButton();
     jScrollPane2 = new JScrollPane();
     table = new JTable();
     jLabel1 = new JLabel();
@@ -64,27 +66,46 @@ public class Dashboard extends JFrame implements FrameBase, ActionListener {
     setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     getContentPane().setLayout(new AbsoluteLayout());
 
+    btnLogout.setBorder(null);
+    btnLogout.setBorderPainted(false);
+    btnLogout.setContentAreaFilled(false);
+    getContentPane().add(btnLogout, new AbsoluteConstraints(1153, 45, 80, 30));
+
     btnPembayaran.setBackground(new Color(255, 153, 0));
     btnPembayaran.setFont(new Font("Helvetica", 1, 14));
     btnPembayaran.setForeground(new Color(0, 0, 0));
     btnPembayaran.setText("Pembayaran");
     btnPembayaran.setBorder(BorderFactory.createEtchedBorder());
-    getContentPane().add(btnPembayaran, new AbsoluteConstraints(710, 110, 340, 150));
+    btnPembayaran.addActionListener(this);
+    getContentPane().add(btnPembayaran, new AbsoluteConstraints(820, 110, 230, 150));
 
-    btnReservasiPerbaikan.setBackground(new Color(255, 153, 0));
-    btnReservasiPerbaikan.setFont(new Font("Helvetica", 1, 14));
-    btnReservasiPerbaikan.setForeground(new Color(0, 0, 0));
-    btnReservasiPerbaikan.setText("Reservasi Perbaikan");
-    btnReservasiPerbaikan.setBorder(BorderFactory.createEtchedBorder());
-    getContentPane().add(btnReservasiPerbaikan, new AbsoluteConstraints(260, 110, 340, 150));
+    btnPerbaikan.setBackground(new Color(255, 153, 0));
+    btnPerbaikan.setFont(new Font("Helvetica", 1, 14));
+    btnPerbaikan.setForeground(new Color(0, 0, 0));
+    btnPerbaikan.setText("Perbaikan");
+    btnPerbaikan.setBorder(BorderFactory.createEtchedBorder());
+    btnPerbaikan.addActionListener(this);
+    getContentPane().add(btnPerbaikan, new AbsoluteConstraints(540, 110, 230, 150));
+
+    btnReservasi.setBackground(new Color(255, 153, 0));
+    btnReservasi.setFont(new Font("Helvetica", 1, 14));
+    btnReservasi.setForeground(new Color(0, 0, 0));
+    btnReservasi.setText("Ambil nomor antrian");
+    btnReservasi.setBorder(BorderFactory.createEtchedBorder());
+    btnReservasi.addActionListener(this);
+    getContentPane().add(btnReservasi, new AbsoluteConstraints(260, 110, 230, 150));
 
     table.setBorder(BorderFactory.createEtchedBorder());
-    table.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "Id Kendaraan", "Nama Kendaraan", "Id Pelanggan", "Status Perbaikan" }));
+    table.setModel(new DefaultTableModel(new Object[][] {}, new String[] { "ID_Reservasi", "ID_Mekanik", "ID_Kendaraan", "ID_Layanan" }));
     jScrollPane2.setViewportView(table);
-    getContentPane().add(jScrollPane2, new AbsoluteConstraints(260, 290, 790, 230));
+    if (table.getColumnModel().getColumnCount() > 0) {
+      table.getColumnModel().getColumn(0).setResizable(false);
+    }
+
+    getContentPane().add(jScrollPane2, new AbsoluteConstraints(260, 320, 790, 230));
 
     jLabel1.setIcon(new ImageIcon(getClass().getClassLoader().getResource("resources/assets/Dashboard.png")));
-    jLabel1.setText("jlabel1");
+    jLabel1.setText("jLabel1");
     getContentPane().add(jLabel1, new AbsoluteConstraints(0, 0, 1246, -1));
 
     jMenuBar1.setBackground(new Color(217, 217, 217));
@@ -93,7 +114,6 @@ public class Dashboard extends JFrame implements FrameBase, ActionListener {
     jMenuBar1.setToolTipText("");
 
     jMenu1.setText("Dashboard");
-    jMenu1.addActionListener(this);
     jMenuBar1.add(jMenu1);
 
     jMenu2.setText("Transaksi");
@@ -142,8 +162,10 @@ public class Dashboard extends JFrame implements FrameBase, ActionListener {
     setLocationRelativeTo(null);
   }
 
+  private JButton btnLogout;
   private JButton btnPembayaran;
-  private JButton btnReservasiPerbaikan;
+  private JButton btnPerbaikan;
+  private JButton btnReservasi;
   private JLabel jLabel1;
   private JMenu jMenu1;
   private JMenu jMenu2;
@@ -168,6 +190,9 @@ public class Dashboard extends JFrame implements FrameBase, ActionListener {
   private DataMekanikFrame dataMekanikFrame;
   private DataKonsultanFrame dataKonsultanFrame;
   private DataKendaraanFrame dataKendaraanFrame;
+  private ReservasiFrame reservasiFrame;
+  private PerbaikanFrame perbaikanFrame;
+  private PembayaranFrame pembayaranFrame;
 
   @Override
   public void actionPerformed(ActionEvent event) {
@@ -213,6 +238,21 @@ public class Dashboard extends JFrame implements FrameBase, ActionListener {
         dataKendaraanFrame = new DataKendaraanFrame();
       }
       App.getPanelSwitcher().openNewFrame(dataKendaraanFrame);
+    } else if (event.getSource() == btnReservasi) {
+      if (reservasiFrame == null) {
+        reservasiFrame = new ReservasiFrame();
+      }
+      App.getPanelSwitcher().openNewFrame(reservasiFrame);
+    } else if (event.getSource() == btnPerbaikan) {
+      if (perbaikanFrame == null) {
+        perbaikanFrame = new PerbaikanFrame();
+      }
+      App.getPanelSwitcher().openNewFrame(perbaikanFrame);
+    } else if (event.getSource() == btnPembayaran) {
+      if (pembayaranFrame == null) {
+        pembayaranFrame = new PembayaranFrame();
+      }
+      App.getPanelSwitcher().openNewFrame(pembayaranFrame);
     }
   }
 
@@ -221,12 +261,12 @@ public class Dashboard extends JFrame implements FrameBase, ActionListener {
     dataList.clear();
     final ResultSet resultSet = dashboardHelper.getAllData();
     if (resultSet == null) {
-      MessageUtil.showErrorMessageDialog(this, "Gagal mengambil data pelanggan!");
+      MessageUtil.showErrorMessageDialog(this, "Gagailhal mengambil data pelanggan!");
       return;
     }
     try {
       while (resultSet.next()) {
-        final Object[] data = { resultSet.getString("id_kendaraan"), resultSet.getString("nama_kendaraan"), resultSet.getString("id_pelanggan"), resultSet.getString("nama_pelanggan") };
+        final Object[] data = { resultSet.getString("id_reservasi"), resultSet.getString("id_mekanik"), resultSet.getString("id_kendaraan"), resultSet.getString("id_layanan") };
         dataList.add(data);
       }
     } catch (SQLException exception) {

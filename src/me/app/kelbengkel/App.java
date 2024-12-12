@@ -14,7 +14,6 @@ public class App {
     appFrame = new JFrame("Dullah Workshop");
     loginPanel = new LoginPanel();
     panelSwitcher = new PanelSwitcher(appFrame);
-    DatabaseConnection.getConnection();
     App.run();
   }
 
@@ -25,6 +24,7 @@ public class App {
     appFrame.pack();
     appFrame.setResizable(false);
     appFrame.setLocationRelativeTo(null);
+    DatabaseConnection.getConnection();
   }
 
   public static PanelSwitcher getPanelSwitcher() {
